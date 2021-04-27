@@ -33,19 +33,19 @@
 ###########################################################################################################################
 
 ## directory where scripts are located
-scripts_dir=CCS_CODE_PATH
+scripts_dir=/data3/cnl/xli/cpac_features/ccs/code/xli/CCS
 ## full/path/to/site
-analysisdirectory=WORKING_DIR
+analysisdirectory=/data3/cnl/xli/cpac_features/ccs/rerun/data
 ## full/path/to/site/subject_list
 #subject_list=${analysisdirectory}/scripts/subjects.list
 ## name of anatomical scan (no extension)
 anat_name=T1w
 ## name of resting-state scan (no extension)
-rest_name=func
+rest_name=rest
 ## anat_dir_name
 anat_dir_name=anat
 ## func_dir_name
-func_dir_name=func
+func_dir_name=func1
 ## TR
 TR=2.0
 ## Drop the first few volumes 
@@ -69,7 +69,7 @@ svd=false
 ## standard brain
 standard_head=${FSLDIR}/data/standard/MNI152_T1_2mm.nii.gz
 standard_brain=${FSLDIR}/data/standard/MNI152_T1_2mm_brain.nii.gz
-standard_template=${scripts_dir}/templates/MNI152_T1_3mm_brain.nii.gz
+standard_template=${scripts_dir}/templates/MNI152_T1_3mm_brain.nii.gz # copy template from C-PAC container to CCS directory
 fsaverage=fsaverage5
 
 ##########################################################################################################################
@@ -93,9 +93,9 @@ echo "-------CCS preprocessing-------"
 echo "${subject}"
 echo "-------------------------------"
 echo "running bbregistration ..."
-${scripts_dir}/ccs_02_xt_funcbbregister.sh ${subject} ${analysisdirectory} ${func_dir_name} ${rest_name} ${use_epi0} ${fsaverage} ${func_reg_dir_name} true
+${scripts_dir}/ccs_02_funcbbregister.sh ${subject} ${analysisdirectory} ${func_dir_name} ${rest_name} ${use_epi0} ${fsaverage}
 echo "running registration to MNI template..."
-${scripts_dir}/ccs_02_xt_funcregister.sh ${subject} ${analysisdirectory} ${anat_dir_name} ${func_dir_name} ${rest_name} ${standard_template} ${anat_reg_dir_name} ${func_reg_dir_name} ${fsaverage} ${scripts_dir} false
+${scripts_dir}/ccs_02_funcregister.sh ${subject} ${analysisdirectory} ${anat_dir_name} ${func_dir_name} ${standard_template} false ${func_reg_dir_name}
 
 ## Segmenting functional images
 echo "-------CCS preprocessing-------"
@@ -124,5 +124,3 @@ echo "${subject}"
 echo "No filtering, detrending, volume to surface projection, smoothing"
 echo "-------------------------------"
 ${scripts_dir}/ccs_05_funcpreproc_final_nofilt.sh ${subject} ${analysisdirectory} ${rest_name} ${anat_dir_name} ${func_dir_name} ${anat_reg_refine} ${standard_template} ${fsaverage} ${anat_reg_dir_name} ${func_reg_dir_name}
-
-

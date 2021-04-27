@@ -32,13 +32,13 @@
 ## PARAMETERS
 ###########################################################################################################################
 ## directory where scripts are located
-scripts_dir=CCS_CODE_PATH
+scripts_dir=/data3/cnl/xli/cpac_features/ccs/code/xli/CCS
 ## full/path/to/site
-analysisdirectory=WORKING_DIR
+analysisdirectory=/data3/cnl/xli/cpac_features/ccs/rerun/data
 ## name of anatomical scan (no extension)
 anat_name=T1w
 ## number of anatomical scan
-num_scans=1
+num_scans=10
 ## anat_dir_name
 anat_dir_name=anat
 ## if do anat registration
@@ -72,7 +72,7 @@ echo "Skull stripping of anatomical images"
 echo "-------------------------------"
 use_gcut=true
 mkdir -p ${analysisdirectory}/${subject}/scripts
-${scripts_dir}/ccs_01_anatpreproc.sh ${subject} ${analysisdirectory} ${anat_name} ${anat_dir_name} ${sanlm_denoise} ${num_scans} ${use_gcut}
+${scripts_dir}/ccs_01_anatpreproc.sh ${subject} ${analysisdirectory} ${anat_name} ${anat_dir_name} ${sanlm_denoise} ${num_scans} ${use_gcut} ${scripts_dir}
 echo  "Please check the quality of brain extraction before going to next step !!! (sometime manual edits of the brainmask.mgz are required)"
 echo  "Check ${analysisdirectory}/${subject}/${anat_dir_name}/vcheck"
 
@@ -96,8 +96,7 @@ echo "running ccs_02_anatregister.sh ..."
 echo "Registering anatomical images to MNI152 template ..."
 echo "-------------------------------"
 ${scripts_dir}/ccs_02_anatregister.sh ${subject} ${analysisdirectory} ${anat_dir_name}
-## Quality assurances of spatial normalization
-reg_refine=false
-${scripts_dir}/ccs_02_anatcheck_fnirt.sh ${analysisdirectory} ${subject_list} ${anat_dir_name} ${standard_brain} ${reg_refine}
-echo  "Check ${analysisdirectory}/${subject}/${anat_dir_name}/reg/vcheck"
-
+# ## Quality assurances of spatial normalization
+# reg_refine=false
+# ${scripts_dir}/ccs_02_anatcheck_fnirt.sh ${analysisdirectory} ${subject_list} ${anat_dir_name} ${standard_brain} ${reg_refine}
+# echo  "Check ${analysisdirectory}/${subject}/${anat_dir_name}/reg/vcheck"
