@@ -52,7 +52,6 @@ then
 	## 1. Performing bbregister
 	fslmaths ${func_dir}/${rest}_mc.nii.gz -Tmean ${func_dir}/mean_func_mc.nii.gz
 	if [ ${redo_reg} = 'true' ]; then
-	then
 		rm -f ${func_reg_dir};  mkdir -p ${func_reg_dir} ; cd ${func_reg_dir}
 		if [ ${if_epi0} = 'true' ]
 		then
