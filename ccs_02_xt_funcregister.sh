@@ -80,19 +80,19 @@ then
         flirt -in ${func_dir}/example_func_brain.nii.gz -ref ${anat_reg_dir}/highres_rpi.nii.gz -applyxfm -init example_func2highres_rpi.mat -out example_func2highres_rpi.nii.gz
     fi 
     if [ ! -f highres_rpi2example_func.mat ]; then
-        convert_xfm -omat highres_rpi2example_func.mat -concat highres2example_func.mat ${anat_reg_dir}/rpi2rsp.mat
+        convert_xfm -omat highres_rpi2example_func.mat -concat highres2example_func.mat ${func_reg_dir}/rpi2rsp.mat
     fi
 	## 3. Making mask for surface-based functional data analysis
 	#if [ ! -e ${func_mask_dir}/brain.mni305.2mm.nii.gz ]; then
 		mkdir -p ${func_mask_dir} ; cd ${func_mask_dir} ; ln -s ${func_dir}/${rest}_pp_mask.nii.gz brain.nii.gz
-		for hemi in lh rh
-		do
+		#for hemi in lh rh
+		#do
 			#surf-mask
-			mri_vol2surf --mov brain.nii.gz --reg ${func_reg_dir}/bbregister.dof6.dat --trgsubject ${fsaverage} --interp nearest --projfrac 0.5 --hemi ${hemi} --o brain.${fsaverage}.${hemi}.nii.gz --noreshape --cortex --surfreg sphere.reg
-			mri_binarize --i brain.${fsaverage}.${hemi}.nii.gz --min .00001 --o brain.${fsaverage}.${hemi}.nii.gz
-		done
+			#mri_vol2surf --mov brain.nii.gz --reg ${func_reg_dir}/bbregister.dof6.dat --trgsubject ${subject} --interp nearest --projfrac 0.5 --hemi ${hemi} --o brain.${fsaverage}.${hemi}.nii.gz --noreshape --cortex --surfreg sphere.reg
+			#mri_binarize --i brain.${fsaverage}.${hemi}.nii.gz --min .00001 --o brain.${fsaverage}.${hemi}.nii.gz
+		#done
 		#volume-mask
-        mri_vol2vol --mov brain.nii.gz --reg ${func_reg_dir}/bbregister.dof6.dat --tal --talres 2 --talxfm talairach.xfm --nearest --no-save-reg --o brain.mni305.2mm.nii.gz
+        #mri_vol2vol --mov brain.nii.gz --reg ${func_reg_dir}/bbregister.dof6.dat --tal --talres 2 --talxfm talairach.xfm --nearest --no-save-reg --o brain.mni305.2mm.nii.gz
         applywarp --interp=nn --ref=${standard} --in=brain.nii.gz --out=brain.mni152.2mm.nii.gz --warp=${anat_reg_dir}/highres2standard_warp --premat=${func_reg_dir}/example_func2highres.mat
 	#fi
 	## 3. Coregistering aparc+aseg to native functional spcace
